@@ -6,6 +6,9 @@ from dotenv import load_dotenv
 from werkzeug.security import check_password_hash
 
 from db import get_db
+from admin import admin_bp
+from teacher import teacher_bp
+from student import student_bp
 
 load_dotenv()
 
@@ -13,6 +16,9 @@ load_dotenv()
 def create_app():
     app = Flask(__name__)
     app.secret_key = os.getenv("SECRET_KEY", "dev-secret-change-me")
+    app.register_blueprint(admin_bp)
+    app.register_blueprint(teacher_bp)
+    app.register_blueprint(student_bp)
 
     def current_user():
         uid = session.get("user_id")
@@ -53,6 +59,7 @@ def create_app():
             conn.close()
             if user and check_password_hash(user["password_hash"], password):
                 session["user_id"] = user["user_id"]
+                session["role"] = user["role"]
                 return redirect(url_for("dashboard"))
             flash("Invalid email or password")
         return render_template("login.html")
