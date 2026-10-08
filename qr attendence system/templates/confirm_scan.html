@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Confirm Scan{% endblock %}
+{% block content %}
+<div class="center">
+  <div class="card" style="text-align:center; width:380px;">
+    <h2>Mark Attendance</h2>
+    <p>Confirm you want to record your attendance.</p>
+    <form method="post" action="{{ url_for('student.submit_scan') }}">
+      <input type="hidden" name="token" value="{{ token }}">
+      <input type="hidden" name="device_id" id="device_id">
+      <button>Confirm</button>
+    </form>
+  </div>
+</div>
+<script>
+  let id = localStorage.getItem('device_id');
+  if (!id) { id = crypto.randomUUID(); localStorage.setItem('device_id', id); }
+  document.getElementById('device_id').value = id;
+</script>
+{% endblock %}

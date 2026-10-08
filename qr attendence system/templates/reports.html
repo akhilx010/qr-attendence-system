@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Reports{% endblock %}
+{% block content %}
+<div class="hero"><h1>Attendance Report</h1><p>Per-student attendance percentage</p></div>
+<p><a class="btn" href="{{ url_for('admin.export_csv') }}">Export CSV</a></p>
+<div class="card">
+  <table>
+    <tr><th>Name</th><th>Roll</th><th>Class</th><th>Eligible</th><th>Attended</th><th>Percentage</th></tr>
+    {% for r in rows %}
+      <tr><td>{{ r.name }}</td><td>{{ r.roll_number }}</td><td>{{ r.class_name }}</td><td>{{ r.eligible }}</td><td>{{ r.attended }}</td><td>{{ r.percentage }}%</td></tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

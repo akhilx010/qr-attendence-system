@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Student{% endblock %}
+{% block content %}
+<div class="hero"><h1>Student Dashboard</h1><p>Your attendance record at a glance</p></div>
+{% with messages = get_flashed_messages() %}{% if messages %}<p class="error">{{ messages[0] }}</p>{% endif %}{% endwith %}
+<div class="stat-grid">
+  <div class="stat"><div class="num">{{ percentage }}%</div><div>Attendance</div></div>
+  <div class="stat"><div class="num">{{ history|length }}</div><div>Records</div></div>
+</div>
+<div class="card">
+  <h2>My Attendance</h2>
+  <table>
+    <tr><th>Date</th><th>Class</th><th>Start</th><th>End</th><th>Status</th><th>Scanned at</th></tr>
+    {% for h in history %}
+      <tr><td>{{ h.date }}</td><td>{{ h.class_name }}</td><td>{{ h.start_time }}</td><td>{{ h.end_time }}</td><td>{{ h.status }}</td><td>{{ h.scan_time }}</td></tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

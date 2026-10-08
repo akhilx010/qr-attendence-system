@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Scan QR{% endblock %}
+{% block head %}<script src="https://unpkg.com/html5-qrcode"></script>{% endblock %}
+{% block content %}
+<div class="center">
+  <div class="card" style="text-align:center; width:420px;">
+    <h2>Scan Attendance QR</h2>
+    <div id="reader" style="width:100%;"></div>
+    <p id="result"></p>
+  </div>
+</div>
+<script>
+  function onScanSuccess(decodedText) { window.location.href = decodedText; }
+  new Html5Qrcode("reader").start({facingMode: "environment"}, {fps: 10, qrbox: 250}, onScanSuccess);
+</script>
+{% endblock %}

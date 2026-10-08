@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Session QR{% endblock %}
+{% block content %}
+<div class="center">
+  <div class="card" style="text-align:center; width:420px;">
+    <h2>{{ session.class_name }}</h2>
+    <p>{{ session.date }} | {{ session.start_time }} - {{ session.end_time }}</p>
+    <img src="data:image/png;base64,{{ qr }}" width="280">
+    <p style="word-break:break-all; font-size:12px;">{{ scan_url }}</p>
+    <a class="btn" href="{{ url_for('teacher.index') }}">&larr; Back</a>
+  </div>
+</div>
+{% endblock %}

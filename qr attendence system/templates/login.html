@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="login-wrap">
+  <div class="card" style="width: 380px;">
+    <h2 style="text-align:center;">ERP Login</h2>
+    {% with messages = get_flashed_messages() %}{% if messages %}<p class="error">{{ messages[0] }}</p>{% endif %}{% endwith %}
+    <form method="post">
+      <label>Email</label><br>
+      <input type="email" name="email" required style="width:100%;"><br>
+      <label>Password</label><br>
+      <input type="password" name="password" required style="width:100%;"><br><br>
+      <button style="width:100%;">Login</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

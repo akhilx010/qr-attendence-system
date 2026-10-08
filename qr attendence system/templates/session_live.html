@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Live Attendance{% endblock %}
+{% block head %}<meta http-equiv="refresh" content="10">{% endblock %}
+{% block content %}
+<div class="hero"><h1>Live Attendance</h1><p>{{ session.class_name }} | {{ session.date }} | {{ session.start_time }} - {{ session.end_time }}</p></div>
+<div class="card">
+  <table>
+    <tr><th>Name</th><th>Roll</th><th>Status</th><th>Scanned at</th><th>Device</th></tr>
+    {% for a in attendees %}
+      <tr><td>{{ a.name }}</td><td>{{ a.roll_number }}</td><td>{{ a.status }}</td><td>{{ a.scan_time }}</td><td>{{ a.device_id }}</td></tr>
+    {% endfor %}
+  </table>
+</div>
+<div class="card">
+  <h2>Manually mark student</h2>
+  <form method="post" action="{{ url_for('teacher.mark_attendance', session_id=session.session_id) }}">
+    <select name="student_id">
+      {% for s in roster %}<option value="{{ s.student_id }}">{{ s.name }}</option>{% endfor %}
+    </select>
+    <select name="status">
+      <option value="present">present</option>
+      <option value="absent">absent</option>
+    </select>
+    <button>Save</button>
+  </form>
+</div>
+{% endblock %}

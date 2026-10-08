@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+<head>
+  <title>{% block title %}QR Attendance{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: 'Helvetica Neue', 'Segoe UI', Arial, sans-serif;
+      background: #fafafa; color: #262626; display: flex; flex-direction: column; min-height: 100vh;
+    }
+    .site-header {
+      position: sticky; top: 0; z-index: 10; background: #fff; border-bottom: 1px solid #dbdbdb;
+      display: flex; justify-content: space-between; align-items: center; padding: 14px 30px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.06);
+    }
+    .brand { font-family: 'Billabong', cursive; font-size: 28px; background: linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); -webkit-background-clip: text; color: transparent; }
+    .site-header nav a { color: #262626; text-decoration: none; margin-left: 18px; font-weight: 600; font-size: 14px; }
+    .site-header nav a:hover { color: #e1306c; }
+
+    main { flex: 1; padding: 30px; max-width: 900px; margin: 0 auto; width: 100%; }
+
+    .hero {
+      background: linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045); color: #fff; padding: 40px;
+      border-radius: 20px; margin-bottom: 24px; text-align: center;
+      box-shadow: 0 15px 30px rgba(220,39,67,.35), inset 0 2px 0 rgba(255,255,255,.25);
+      transform: perspective(800px) rotateX(4deg); transform-origin: center;
+    }
+    .hero h1 { margin: 0 0 8px; font-size: 30px; }
+    .hero p { opacity: .9; margin: 0; }
+
+    .card {
+      background: #fff; padding: 24px; border-radius: 16px; margin-bottom: 24px;
+      box-shadow: 0 10px 25px rgba(0,0,0,.08), 0 2px 0 rgba(0,0,0,.04);
+      border: 1px solid #efefef;
+    }
+    .card h2 { margin-top: 0; font-size: 18px; }
+
+    input, select { padding: 10px 12px; margin: 6px 4px; border: 1px solid #dbdbdb; border-radius: 10px; background: #fafafa; }
+    button, .btn {
+      background: linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); color: #fff; border: none;
+      padding: 10px 18px; border-radius: 12px; cursor: pointer; text-decoration: none; display: inline-block;
+      font-weight: 700; box-shadow: 0 6px 14px rgba(224,49,84,.35); transition: transform .15s;
+    }
+    button:hover, .btn:hover { transform: translateY(-2px); }
+
+    table { border-collapse: collapse; width: 100%; background: #fff; }
+    th { background: #fafafa; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; color: #8e8e8e; }
+    th, td { border-bottom: 1px solid #efefef; padding: 10px 12px; text-align: left; }
+    tbody tr:hover { background: #fff5f7; }
+
+    .error { color: #ed4956; }
+    a { color: #0095f6; }
+
+    .stat-grid { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+    .stat {
+      flex: 1; min-width: 150px; background: #fff; padding: 22px; text-align: center; border-radius: 16px;
+      box-shadow: 0 12px 25px rgba(0,0,0,.08); transform: translateY(-4px);
+    }
+    .stat .num { font-size: 34px; font-weight: 800; background: linear-gradient(45deg,#f09433,#dc2743,#bc1888); -webkit-background-clip: text; color: transparent; }
+
+    .float-btn { position: fixed; right: 20px; bottom: 80px; width: 58px; height: 58px; border-radius: 50%;
+      background: linear-gradient(45deg,#833ab4,#fd1d1d,#fcb045); color: #fff; display: flex; align-items: center; justify-content: center;
+      font-weight: 800; text-decoration: none; box-shadow: 0 10px 20px rgba(0,0,0,.25); }
+
+    .site-footer { background: #262626; color: #a8a8a8; padding: 30px; margin-top: 40px; }
+    .footer-grid { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 20px; }
+    .site-footer h3 { color: #fff; margin-top: 0; }
+    .site-footer a { color: #a8a8a8; display: block; margin-bottom: 6px; text-decoration: none; }
+    .site-footer a:hover { color: #fff; }
+    .footer-bottom { text-align: center; padding: 16px; margin-top: 20px; border-top: 1px solid #3b3b3b; font-size: 13px; }
+
+    .center { display: flex; justify-content: center; }
+    .login-wrap { display: flex; justify-content: center; padding-top: 60px; }
+  </style>
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">QR Attendance</div>
+    <nav>
+      {% if session.get('user_id') %}
+        <a href="{{ url_for('dashboard') }}">Home</a>
+        {% if session.get('role') == 'admin' %}<a href="{{ url_for('admin.index') }}">Admin</a><a href="{{ url_for('admin.reports') }}">Reports</a>{% endif %}
+        {% if session.get('role') == 'teacher' %}<a href="{{ url_for('teacher.index') }}">Teacher Tools</a>{% endif %}
+        {% if session.get('role') == 'student' %}<a href="{{ url_for('student.index') }}">My Attendance</a><a href="{{ url_for('student.scanner') }}">Scan QR</a>{% endif %}
+        <a href="{{ url_for('logout') }}">Logout</a>
+      {% else %}
+        <a href="{{ url_for('login') }}">Login</a>
+      {% endif %}
+    </nav>
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+  <a class="float-btn" href="{{ url_for('student.scanner') if session.get('role') == 'student' else url_for('login') }}" title="Quick scan">QR</a>
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div><h3>QR Attendance</h3><p>Secure, fast QR-based attendance for teachers and students.</p></div>
+      <div><h3>Quick Links</h3><a href="{{ url_for('dashboard') }}">Dashboard</a><a href="{{ url_for('login') }}">Login</a></div>
+      <div><h3>Contact</h3><p>support@qrattendance.local</p></div>
+      <div><h3>Help</h3><p>Need help? Contact your class teacher or admin.</p></div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 QR Attendance System</div>
+  </footer>
+</body>
+</html>

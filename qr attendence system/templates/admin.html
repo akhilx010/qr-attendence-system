@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Admin{% endblock %}
+{% block content %}
+<div class="hero"><h1>Admin Portal</h1><p>Manage users, classes, subjects and reports</p></div>
+<p><a class="btn" href="{{ url_for('admin.reports') }}">Attendance Reports</a></p>
+{% with messages = get_flashed_messages() %}{% if messages %}<p class="error">{{ messages[0] }}</p>{% endif %}{% endwith %}
+
+<div class="card">
+  <h2>Teachers</h2>
+  <form method="post" action="{{ url_for('admin.add_teacher') }}">
+    <input name="name" placeholder="Name" required>
+    <input name="email" type="email" placeholder="Email" required>
+    <input name="password" type="password" placeholder="Password" required>
+    <button>Add Teacher</button>
+  </form>
+  <table><tr><th>ID</th><th>Name</th><th>Email</th></tr>
+    {% for t in teachers %}<tr><td>{{ t.user_id }}</td><td>{{ t.name }}</td><td>{{ t.email }}</td></tr>{% endfor %}
+  </table>
+</div>
+
+<div class="card">
+  <h2>Subjects</h2>
+  <form method="post" action="{{ url_for('admin.add_subject') }}">
+    <input name="subject_name" placeholder="Subject name" required>
+    <button>Add Subject</button>
+  </form>
+  <table><tr><th>ID</th><th>Name</th></tr>
+    {% for s in subjects %}<tr><td>{{ s.subject_id }}</td><td>{{ s.subject_name }}</td></tr>{% endfor %}
+  </table>
+</div>
+
+<div class="card">
+  <h2>Classes</h2>
+  <form method="post" action="{{ url_for('admin.add_class') }}">
+    <input name="class_name" placeholder="Class name" required>
+    <input name="subject" placeholder="Subject">
+    <select name="teacher_id">
+      <option value="">-- Teacher --</option>
+      {% for t in teachers %}<option value="{{ t.user_id }}">{{ t.name }}</option>{% endfor %}
+    </select>
+    <button>Add Class</button>
+  </form>
+  <table><tr><th>ID</th><th>Name</th><th>Subject</th><th>Teacher</th></tr>
+    {% for c in classes %}<tr><td>{{ c.class_id }}</td><td>{{ c.class_name }}</td><td>{{ c.subject }}</td><td>{{ c.teacher_name }}</td></tr>{% endfor %}
+  </table>
+</div>
+
+<div class="card">
+  <h2>Students</h2>
+  <form method="post" action="{{ url_for('admin.add_student') }}">
+    <input name="name" placeholder="Name" required>
+    <input name="email" type="email" placeholder="Email" required>
+    <input name="password" type="password" placeholder="Password" required>
+    <input name="roll_number" placeholder="Roll number">
+    <select name="class_id">
+      <option value="">-- Class --</option>
+      {% for c in classes %}<option value="{{ c.class_id }}">{{ c.class_name }}</option>{% endfor %}
+    </select>
+    <button>Add Student</button>
+  </form>
+  <table><tr><th>ID</th><th>Name</th><th>Email</th><th>Roll</th><th>Class</th></tr>
+    {% for s in students %}<tr><td>{{ s.student_id }}</td><td>{{ s.name }}</td><td>{{ s.email }}</td><td>{{ s.roll_number }}</td><td>{{ s.class_name }}</td></tr>{% endfor %}
+  </table>
+</div>
+{% endblock %}
